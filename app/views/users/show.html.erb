@@ -1,0 +1,31 @@
+<h2>User: <%= @user.name %></h2>
+<p>Send messages</p>
+
+<div>
+  <%= form_tag messages_path, method: :post do %>
+    <%= hidden_field_tag :sender_id, @user.id %>
+    <table style="margin:0 auto;">
+      <tr>
+        <td>To</td>
+        <td>
+          <%= select_tag "receiver_ids[]",
+            options_from_collection_for_select(User.sendable_users(@user.id), :id, :name),
+              multiple: true, size: 5, style: "width: 200px;" %><br />
+        </td>
+      </tr>
+
+      <tr>
+        <td>Content</td>
+        <td>
+          <%= text_area_tag :message_content, nil, rows:7, style: "width: 200px;" %>
+        </td>
+      </tr>
+
+      <tr>
+      <td>Send in</td>
+      <td><%= select_tag :period, options_for_select(0..10), {} %>minute(s)</td>
+      </tr>
+    </table>
+    <%= submit_tag :send %>
+  <% end %>
+</div>
